@@ -1,0 +1,29 @@
+{
+  "total_pages": 137490,
+  "avg_position": 18.5954915883542,
+  "avg_ctr": 0.004433299284884646,
+  "category_distribution": {
+    "\u26a0\ufe0f UNDERPERFORMING - Review Content": 123493,
+    "\ud83d\udcc9 DEEP RANKING - Consider Prune/Merge": 13762,
+    "\ud83d\udd0d LOW VISIBILITY - Build Authority": 223,
+    "\ud83d\udc40 VISIBLE BUT UNDERPERFORMING - Improve Content": 12
+  },
+  "priority_distribution": {
+    "\u26aa P3 - Low": 130995,
+    "\ud83d\udfe2 P2 - Medium": 6451,
+    "\ud83d\udfe1 P1 - High": 44
+  },
+  "ai_traffic": {
+    "pages_with_ai": 209,
+    "total_ai_sessions": 1141,
+    "chatgpt": 1074,
+    "perplexity": 14,
+    "gemini": 38
+  },
+  "action_items": {
+    "prune_merge": 13762,
+    "review_content": 123493,
+    "build_authority": 223,
+    "optimize": 0
+  }
+}

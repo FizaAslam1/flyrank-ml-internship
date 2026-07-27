@@ -1,0 +1,22 @@
+{
+  "Charts": [
+    "docs/category_distribution.png",
+    "docs/feature_correlations.png",
+    "docs/ai_source_distribution.png",
+    "docs/priority_distribution.png"
+  ],
+  "Tables (CSV)": [
+    "data/category_distribution_table.csv",
+    "data/top_10_opportunities.csv",
+    "data/ai_traffic_pages.csv",
+    "data/key_findings_table.csv",
+    "data/priority_distribution.csv",
+    "data/action_playbook.csv"
+  ],
+  "Data (Parquet)": [
+    "data/page_scores.parquet"
+  ],
+  "JSON": [
+    "data/final_summary.json"
+  ]
+}
