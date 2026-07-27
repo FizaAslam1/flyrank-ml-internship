@@ -1,0 +1,459 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Content Opportunity Scoring - FlyRank Capstone</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+            background: #f8f9fa;
+            color: #1a1a2e;
+            line-height: 1.7;
+            padding: 40px 20px;
+        }
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+            background: #ffffff;
+            padding: 50px 60px;
+            border-radius: 16px;
+            box-shadow: 0 4px 24px rgba(0,0,0,0.06);
+        }
+        h1 {
+            font-size: 2.4rem;
+            font-weight: 700;
+            color: #0a0a23;
+            margin-bottom: 8px;
+            letter-spacing: -0.5px;
+        }
+        .subtitle {
+            font-size: 1.1rem;
+            color: #4a4a6a;
+            margin-bottom: 30px;
+            border-bottom: 2px solid #e9ecef;
+            padding-bottom: 20px;
+        }
+        .author-line {
+            font-size: 0.95rem;
+            color: #6c757d;
+            margin-bottom: 30px;
+        }
+        h2 {
+            font-size: 1.6rem;
+            font-weight: 600;
+            margin-top: 40px;
+            margin-bottom: 16px;
+            color: #0a0a23;
+            border-bottom: 1px solid #e9ecef;
+            padding-bottom: 8px;
+        }
+        h3 {
+            font-size: 1.2rem;
+            font-weight: 600;
+            margin-top: 28px;
+            margin-bottom: 12px;
+            color: #1a1a3e;
+        }
+        p {
+            margin-bottom: 16px;
+            color: #2d2d44;
+        }
+        ul, ol {
+            margin-bottom: 16px;
+            padding-left: 24px;
+            color: #2d2d44;
+        }
+        li {
+            margin-bottom: 6px;
+        }
+        .highlight-box {
+            background: #f0f4ff;
+            border-left: 4px solid #4a6cf7;
+            padding: 16px 24px;
+            border-radius: 6px;
+            margin: 20px 0;
+        }
+        .highlight-box strong {
+            color: #4a6cf7;
+        }
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+            gap: 16px;
+            margin: 24px 0;
+        }
+        .stat-card {
+            background: #f8f9fc;
+            padding: 16px 20px;
+            border-radius: 10px;
+            text-align: center;
+            border: 1px solid #e9ecef;
+        }
+        .stat-number {
+            font-size: 1.8rem;
+            font-weight: 700;
+            color: #0a0a23;
+        }
+        .stat-label {
+            font-size: 0.85rem;
+            color: #6c757d;
+            margin-top: 4px;
+        }
+        .stat-number.gold { color: #f59e0b; }
+        .stat-number.red { color: #ef4444; }
+        .stat-number.green { color: #10b981; }
+        .stat-number.blue { color: #3b82f6; }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 20px 0 24px;
+            font-size: 0.9rem;
+        }
+        th {
+            background: #f1f3f5;
+            text-align: left;
+            padding: 10px 14px;
+            font-weight: 600;
+            border-bottom: 2px solid #dee2e6;
+        }
+        td {
+            padding: 10px 14px;
+            border-bottom: 1px solid #e9ecef;
+        }
+        tr:hover {
+            background: #f8f9fa;
+        }
+        .badge {
+            display: inline-block;
+            padding: 3px 12px;
+            border-radius: 20px;
+            font-size: 0.75rem;
+            font-weight: 600;
+            letter-spacing: 0.3px;
+        }
+        .badge-green { background: #d1fae5; color: #065f46; }
+        .badge-yellow { background: #fef3c7; color: #92400e; }
+        .badge-red { background: #fee2e2; color: #991b1b; }
+        .badge-blue { background: #dbeafe; color: #1e40af; }
+        .badge-purple { background: #ede9fe; color: #5b21b6; }
+        .badge-gray { background: #f3f4f6; color: #374151; }
+        .recommendation-card {
+            background: #fafbfc;
+            border: 1px solid #e9ecef;
+            border-radius: 10px;
+            padding: 18px 22px;
+            margin: 12px 0;
+        }
+        .recommendation-card .title {
+            font-weight: 600;
+            color: #0a0a23;
+        }
+        .code-block {
+            background: #1a1a2e;
+            color: #e4e4f0;
+            padding: 16px 20px;
+            border-radius: 8px;
+            font-family: 'Courier New', monospace;
+            font-size: 0.85rem;
+            overflow-x: auto;
+            margin: 16px 0;
+        }
+        .code-block a {
+            color: #7aa2f7;
+        }
+        .footer {
+            margin-top: 40px;
+            padding-top: 24px;
+            border-top: 2px solid #e9ecef;
+            font-size: 0.9rem;
+            color: #6c757d;
+        }
+        .footer a {
+            color: #4a6cf7;
+            text-decoration: none;
+        }
+        .footer a:hover {
+            text-decoration: underline;
+        }
+        @media (max-width: 768px) {
+            .container { padding: 24px 16px; }
+            h1 { font-size: 1.8rem; }
+            .stats-grid { grid-template-columns: 1fr 1fr; }
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+
+    <!-- ===== TITLE & ABSTRACT ===== -->
+    <h1>Content Opportunity Scoring</h1>
+    <div class="subtitle">A Data-Driven Framework for Prioritizing SEO Actions</div>
+    <div class="author-line">FlyRank ML Internship Capstone &bull; July 2026</div>
+
+    <div class="highlight-box">
+        <strong>Abstract:</strong> How can content teams identify which pages need SEO attention first? 
+        We analyzed <strong>137,490 pages</strong> from the FlyRank search warehouse using a composite 
+        opportunity scoring model with five core features: visibility (30%), engagement (25%), CTR (20%), 
+        position (15%), and AI traffic (10%). Our analysis reveals that <strong>89.8% of pages</strong> 
+        show 0% click-through rate despite ranking in positions 10-20, indicating poor meta/CTR optimization. 
+        Only <strong>0.15% of pages</strong> receive AI traffic (all from ChatGPT), revealing a major 
+        AI optimization opportunity. The framework categorizes pages into six actionable archetypes and 
+        provides a repeatable, data-driven playbook for content prioritization — directional and 
+        decision-support, not causal.
+    </div>
+
+    <!-- ===== INTRODUCTION ===== -->
+    <h2>1. Introduction</h2>
+    <p>
+        Content teams face a fundamental challenge: with hundreds of thousands of pages, how do you 
+        decide <strong>which pages to optimize, rewrite, or remove?</strong> Most teams rely on intuition 
+        or simple metrics like rank position alone. This approach misses critical signals like 
+        <strong>engagement, click-through rates, and AI referral potential</strong>.
+    </p>
+    <p>
+        This paper presents a <strong>repeatable, data-driven opportunity scoring framework</strong> 
+        built on real FlyRank search data. The framework answers one core question:
+    </p>
+    <p style="font-size: 1.1rem; font-weight: 500; color: #1a1a3e; text-align: center; padding: 8px 0;">
+        "Which page should I work on next, and what should I do with it?"
+    </p>
+    <p>
+        The output is a <strong>ranked action engine</strong> that categorizes pages into six actionable 
+        archetypes with specific recommendations. This enables content teams to move from reactive 
+        firefighting to <strong>strategic, data-backed prioritization</strong>.
+    </p>
+
+    <!-- ===== DATA ===== -->
+    <h2>2. Data</h2>
+    <p>
+        This analysis uses the <strong>FlyRank internship-warehouse</strong> dataset — a pseudonymized 
+        search performance warehouse containing Google Search Console (GSC), Google Analytics 4 (GA4), 
+        and AI referral data.
+    </p>
+
+    <div class="stats-grid">
+        <div class="stat-card"><div class="stat-number">390,720</div><div class="stat-label">Total Rows</div></div>
+        <div class="stat-card"><div class="stat-number">137,490</div><div class="stat-label">Unique Pages</div></div>
+        <div class="stat-card"><div class="stat-number">104</div><div class="stat-label">Clients</div></div>
+        <div class="stat-card"><div class="stat-number">1 Day</div><div class="stat-label">Date Window</div></div>
+    </div>
+
+    <h3>2.1 Data Sources</h3>
+    <table>
+        <thead><tr><th>Source</th><th>Key Metrics</th></tr></thead>
+        <tbody>
+            <tr><td><strong>Google Search Console (GSC)</strong></td><td>Impressions, Clicks, Position, CTR</td></tr>
+            <tr><td><strong>Google Analytics 4 (GA4)</strong></td><td>Pageviews, Sessions, Users, Engaged Sessions, Engagement Time</td></tr>
+            <tr><td><strong>AI Referrals</strong></td><td>ChatGPT, Perplexity, Gemini, Copilot, Claude, Meta AI</td></tr>
+        </tbody>
+    </table>
+
+    <h3>2.2 Data Exclusions</h3>
+    <ul>
+        <li><strong>Client-level data:</strong> Excluded to focus on content performance, not client differences</li>
+        <li><strong>Query-level data:</strong> Not used due to complexity and sparse distribution</li>
+        <li><strong>Pages with missing data:</strong> Filtered to maintain data quality</li>
+    </ul>
+
+    <div class="highlight-box">
+        <strong>Data Credit:</strong> Built on the <a href="https://flyrank.ai" target="_blank">FlyRank ML Internship dataset</a> — pseudonymized, salted hash keys; no re-identification attempted.
+    </div>
+
+    <!-- ===== METHODOLOGY ===== -->
+    <h2>3. Methodology</h2>
+
+    <h3>3.1 Feature Engineering</h3>
+    <p>
+        For each page, we aggregated daily performance into <strong>five core feature groups</strong>:
+    </p>
+    <table>
+        <thead><tr><th>Feature</th><th>Weight</th><th>Description</th></tr></thead>
+        <tbody>
+            <tr><td><strong>Visibility Score</strong></td><td>30%</td><td>Impressions relative to top page</td></tr>
+            <tr><td><strong>Engagement Score</strong></td><td>25%</td><td>GA4 engaged sessions relative to top page</td></tr>
+            <tr><td><strong>CTR Score</strong></td><td>20%</td><td>Click-through rate relative to top page</td></tr>
+            <tr><td><strong>Position Score</strong></td><td>15%</td><td>Lower position = higher score (1/(position+1))</td></tr>
+            <tr><td><strong>AI Score</strong></td><td>10%</td><td>AI referral sessions relative to top page</td></tr>
+        </tbody>
+    </table>
+
+    <h3>3.2 Categorization Rules</h3>
+    <table>
+        <thead><tr><th>Category</th><th>Score</th><th>Position</th><th>Impressions</th></tr></thead>
+        <tbody>
+            <tr><td><span class="badge badge-green">⭐ TOP PERFORMER</span></td><td>≥ 50</td><td>&lt; 10</td><td>Any</td></tr>
+            <tr><td><span class="badge badge-blue">📈 HIGH OPPORTUNITY</span></td><td>≥ 50</td><td>≥ 10</td><td>Any</td></tr>
+            <tr><td><span class="badge badge-yellow">👀 VISIBLE BUT UNDERPERFORMING</span></td><td>20–49</td><td>Any</td><td>&gt; 1,000</td></tr>
+            <tr><td><span class="badge badge-purple">🔍 LOW VISIBILITY</span></td><td>20–49</td><td>Any</td><td>≤ 1,000</td></tr>
+            <tr><td><span class="badge badge-red">📉 DEEP RANKING</span></td><td>&lt; 20</td><td>&gt; 50</td><td>Any</td></tr>
+            <tr><td><span class="badge badge-gray">⚠️ UNDERPERFORMING</span></td><td>&lt; 20</td><td>≤ 50</td><td>Any</td></tr>
+        </tbody>
+    </table>
+
+    <!-- ===== RESULTS ===== -->
+    <h2>4. Results</h2>
+
+    <h3>4.1 Category Distribution</h3>
+    <div class="stats-grid">
+        <div class="stat-card"><div class="stat-number red">123,493</div><div class="stat-label">⚠️ Underperforming (89.8%)</div></div>
+        <div class="stat-card"><div class="stat-number gold">13,762</div><div class="stat-label">📉 Deep Ranking (10.0%)</div></div>
+        <div class="stat-card"><div class="stat-number blue">223</div><div class="stat-label">🔍 Low Visibility (0.16%)</div></div>
+        <div class="stat-card"><div class="stat-number green">12</div><div class="stat-label">👀 Visible But Underperforming (0.009%)</div></div>
+    </div>
+
+    <div class="highlight-box">
+        <strong>🔴 Key Finding:</strong> <strong>89.8% of pages</strong> (123,493) are underperforming — 
+        they rank reasonably well (positions 10–20) but have <strong>0% click-through rate</strong>.
+        This indicates poor meta titles, descriptions, or content relevance.
+    </div>
+
+    <h3>4.2 AI Referral Analysis</h3>
+    <table>
+        <thead><tr><th>Metric</th><th>Value</th></tr></thead>
+        <tbody>
+            <tr><td>Pages with AI traffic</td><td><strong>209</strong> (0.15% of total)</td></tr>
+            <tr><td>Total AI sessions</td><td><strong>1,881</strong></td></tr>
+            <tr><td>AI source breakdown</td><td><strong>100% ChatGPT</strong> (0% Perplexity/Gemini)</td></tr>
+            <tr><td>Average position of AI-referred pages</td><td><strong>12.0</strong></td></tr>
+            <tr><td>AI sessions per page</td><td><strong>9</strong> (uniform)</td></tr>
+        </tbody>
+    </table>
+
+    <!-- ===== LIMITATIONS ===== -->
+    <h2>5. Limitations &amp; Honest Framing</h2>
+
+    <div class="highlight-box">
+        <strong>⚠️ Important: This analysis is directional, not causal.</strong>
+    </div>
+
+    <ul>
+        <li><strong>Single-day data:</strong> The analysis uses only June 1, 2026. This is a <strong>snapshot</strong>, not a time-series analysis.</li>
+        <li><strong>Sparse AI data:</strong> Only 0.15% of pages have AI referral data. The AI score component has limited statistical power.</li>
+        <li><strong>Cross-sectional only:</strong> We cannot make predictions about future performance.</li>
+        <li><strong>No causal claims:</strong> Correlation ≠ causation. We do not claim that optimization will improve rankings.</li>
+        <li><strong>Anonymized data:</strong> All identifiers are pseudonymized. We cannot link to real websites.</li>
+    </ul>
+
+    <p>
+        <strong>Decision-support language:</strong> These recommendations are <strong>directional</strong> — 
+        they should be used as a starting point for human review, not as automated decisions.
+    </p>
+
+    <!-- ===== RANKED RECOMMENDATIONS ===== -->
+    <h2>6. Ranked Recommendations</h2>
+
+    <div class="recommendation-card">
+        <div class="title"><span class="badge badge-green">⭐ TOP PERFORMER - Maintain</span></div>
+        <ul>
+            <li>✅ Monitor performance weekly for any declines</li>
+            <li>✅ Keep content fresh with minor updates</li>
+            <li>✅ Promote on social media for more visibility</li>
+        </ul>
+    </div>
+
+    <div class="recommendation-card">
+        <div class="title"><span class="badge badge-blue">📈 HIGH OPPORTUNITY - Optimize</span></div>
+        <ul>
+            <li>🔧 Improve meta titles and descriptions to boost CTR</li>
+            <li>🔧 Add more relevant keywords naturally in content</li>
+            <li>🔧 Update content with fresh information and examples</li>
+            <li>🔧 Improve internal linking to pass authority</li>
+        </ul>
+    </div>
+
+    <div class="recommendation-card">
+        <div class="title"><span class="badge badge-yellow">👀 VISIBLE BUT UNDERPERFORMING - Improve Content</span></div>
+        <ul>
+            <li>✏️ Rewrite introduction to better match user intent</li>
+            <li>✏️ Add multimedia (images, videos, infographics)</li>
+            <li>✏️ Improve readability and content structure</li>
+            <li>✏️ Update with latest data and examples</li>
+        </ul>
+    </div>
+
+    <div class="recommendation-card">
+        <div class="title"><span class="badge badge-purple">🔍 LOW VISIBILITY - Build Authority</span></div>
+        <ul>
+            <li>📣 Build quality backlinks to this page</li>
+            <li>📣 Share on relevant forums, communities, and social media</li>
+            <li>📣 Create supporting content (sister articles, pillar pages)</li>
+            <li>📣 Improve site speed and mobile experience</li>
+        </ul>
+    </div>
+
+    <div class="recommendation-card">
+        <div class="title"><span class="badge badge-red">📉 DEEP RANKING - Consider Prune/Merge</span></div>
+        <ul>
+            <li>🗑️ <strong>Priority:</strong> Merge with similar higher-authority content</li>
+            <li>🗑️ Redirect to more authoritative page</li>
+            <li>🗑️ Delete if completely irrelevant or outdated</li>
+        </ul>
+    </div>
+
+    <div class="recommendation-card">
+        <div class="title"><span class="badge badge-gray">⚠️ UNDERPERFORMING - Review Content</span></div>
+        <ul>
+            <li>🔍 Review if content meets user search intent</li>
+            <li>🔍 Check for outdated or incorrect information</li>
+            <li>🔍 Add more comprehensive coverage of the topic</li>
+            <li>🔍 Consider complete rewrite with better structure</li>
+        </ul>
+    </div>
+
+    <!-- ===== REPRODUCIBILITY ===== -->
+    <h2>7. Reproducibility</h2>
+    <p>
+        All code and analysis are available in the public repository:
+    </p>
+    <div class="code-block">
+        <a href="https://github.com/FizaAslam1/flyrank-ml-internship" target="_blank">https://github.com/FizaAslam1/flyrank-ml-internship</a>
+    </div>
+    <p>
+        Repository structure:
+    </p>
+    <ul>
+        <li><strong>work/notebooks/</strong> — All Jupyter notebooks</li>
+        <li><strong>data/</strong> — Feature data and results</li>
+        <li><strong>docs/</strong> — Deployed paper and charts</li>
+        <li><strong>submission/paper_url.txt</strong> — URL to deployed paper</li>
+    </ul>
+
+    <!-- ===== ACKNOWLEDGMENTS ===== -->
+    <h2>8. Acknowledgments &amp; Data Credit</h2>
+    <p>
+        This research was conducted as part of the <strong>FlyRank ML Internship Capstone</strong>.
+    </p>
+    <div class="highlight-box">
+        <strong>Data Credit:</strong> Built on the <a href="https://flyrank.ai" target="_blank">FlyRank ML Internship dataset</a> — 
+        pseudonymized, salted hash keys; no re-identification attempted. The dataset is provided for 
+        anonymized research and education use only. No client-identifying data appears in this output.
+    </div>
+    <p>
+        Special thanks to the FlyRank team for providing real-world search data and the opportunity to 
+        work on this capstone project.
+    </p>
+
+    <!-- ===== FOOTER ===== -->
+    <div class="footer">
+        <p>
+            <strong>Citation:</strong> Content Opportunity Scoring: A Data-Driven Framework for Prioritizing SEO Actions. 
+            FlyRank ML Internship Capstone, July 2026.
+        </p>
+        <p>
+            <a href="https://flyrank.ai" target="_blank">flyrank.ai</a> &bull; 
+            Built with real FlyRank search data &bull; 
+            Anonymized research use only
+        </p>
+    </div>
+
+</div>
+
+</body>
+</html>
