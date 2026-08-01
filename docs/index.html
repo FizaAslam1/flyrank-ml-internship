@@ -5,57 +5,77 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Content Refresh Prioritization — Capstone Paper | Fiza Aslam</title>
     <style>
-        body {
-            font-family: 'Inter', Georgia, serif;
-            max-width: 850px;
-            margin: 0 auto;
-            padding: 2rem;
-            background: #FAFAFA;
-            color: #1A1A1A;
-            line-height: 1.7;
+        :root {
+            --main: #1E3A5F;
+            --text: #1A1A1A;
+            --bg: #FAFAFA;
+            --accent: #0D9488;
+            --border: #e2e8f0;
+            --highlight-bg: #fef3c7;
+            --note-bg: #eff6ff;
+            --warning-bg: #fffbeb;
+            --success-bg: #f0fdf4;
         }
-        h1 { color: #1E3A5F; font-size: 2.2rem; margin-top: 0; }
-        h2 { color: #1E3A5F; font-size: 1.6rem; margin-top: 2.5rem; border-bottom: 2px solid #e2e8f0; padding-bottom: 0.5rem; }
-        h3 { color: #334155; font-size: 1.3rem; margin-top: 2rem; }
-        h4 { color: #475569; font-size: 1.1rem; }
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body {
+            font-family: 'Inter', Georgia, 'Segoe UI', serif;
+            max-width: 860px;
+            margin: 0 auto;
+            padding: 2.5rem 2rem;
+            background: var(--bg);
+            color: var(--text);
+            line-height: 1.75;
+        }
+        h1 { color: var(--main); font-size: 2.4rem; margin-top: 0; letter-spacing: -0.5px; }
+        h2 { color: var(--main); font-size: 1.7rem; margin-top: 2.8rem; border-bottom: 2px solid var(--border); padding-bottom: 0.5rem; }
+        h3 { color: #334155; font-size: 1.35rem; margin-top: 2rem; }
+        h4 { color: #475569; font-size: 1.1rem; margin-top: 1.5rem; }
+        p { margin: 1rem 0; }
         table { border-collapse: collapse; width: 100%; margin: 1.5rem 0; font-size: 0.95rem; }
         th, td { border: 1px solid #cbd5e1; padding: 10px 14px; text-align: left; }
-        th { background: #1E3A5F; color: white; font-weight: 600; }
+        th { background: var(--main); color: white; font-weight: 600; }
         tr:nth-child(even) { background: #f8fafc; }
-        .metric { font-weight: 700; color: #0D9488; }
-        .highlight { background: #fef3c7; padding: 2px 6px; border-radius: 4px; font-weight: 600; }
-        .warning { background: #fffbeb; border-left: 4px solid #f59e0b; padding: 1.2rem; margin: 1.5rem 0; border-radius: 0 8px 8px 0; }
-        .note { background: #eff6ff; border-left: 4px solid #3b82f6; padding: 1.2rem; margin: 1.5rem 0; border-radius: 0 8px 8px 0; }
-        .success { background: #f0fdf4; border-left: 4px solid #22c55e; padding: 1.2rem; margin: 1.5rem 0; border-radius: 0 8px 8px 0; }
-        code { background: #f1f5f9; padding: 2px 6px; border-radius: 4px; font-family: 'Courier New', monospace; }
-        pre { background: #1e293b; color: #e2e8f0; padding: 1.2rem; border-radius: 8px; overflow-x: auto; line-height: 1.5; }
-        a { color: #1E3A5F; text-decoration: underline; }
-        ul, ol { margin: 1rem 0; padding-left: 1.5rem; }
+        .metric { font-weight: 700; color: var(--accent); }
+        .highlight { background: var(--highlight-bg); padding: 2px 8px; border-radius: 4px; font-weight: 600; }
+        .note { background: var(--note-bg); border-left: 4px solid #3b82f6; padding: 1.2rem 1.5rem; margin: 1.5rem 0; border-radius: 0 8px 8px 0; }
+        .warning { background: var(--warning-bg); border-left: 4px solid #f59e0b; padding: 1.2rem 1.5rem; margin: 1.5rem 0; border-radius: 0 8px 8px 0; }
+        .success { background: var(--success-bg); border-left: 4px solid #22c55e; padding: 1.2rem 1.5rem; margin: 1.5rem 0; border-radius: 0 8px 8px 0; }
+        code { background: #f1f5f9; padding: 2px 6px; border-radius: 4px; font-family: 'Courier New', monospace; font-size: 0.9rem; }
+        pre { background: #1e293b; color: #e2e8f0; padding: 1.2rem; border-radius: 8px; overflow-x: auto; line-height: 1.5; font-size: 0.9rem; }
+        a { color: var(--main); text-decoration: underline; }
+        ul, ol { margin: 1rem 0; padding-left: 1.8rem; }
         li { margin: 0.5rem 0; }
-        .subtitle { color: #64748b; font-size: 1.2rem; margin-top: -1rem; }
-        .badge { display: inline-block; padding: 4px 12px; border-radius: 20px; font-size: 0.85rem; font-weight: 600; }
+        .subtitle { color: #64748b; font-size: 1.2rem; margin-top: -0.8rem; font-weight: 400; }
+        .badge { display: inline-block; padding: 4px 12px; border-radius: 20px; font-size: 0.85rem; font-weight: 600; margin-right: 6px; }
         .badge-red { background: #fef2f2; color: #dc2626; }
         .badge-green { background: #f0fdf4; color: #16a34a; }
         .badge-yellow { background: #fffbeb; color: #d97706; }
         .badge-blue { background: #eff6ff; color: #2563eb; }
+        hr { border: none; border-top: 1px solid var(--border); margin: 2rem 0; }
+        .hero { text-align: center; padding: 2rem 0; }
+        .hero h1 { font-size: 2.6rem; margin-bottom: 0.5rem; }
+        .footer { text-align: center; color: #94a3b8; margin-top: 3rem; font-size: 0.9rem; }
+        blockquote { border-left: 4px solid var(--accent); padding-left: 1rem; margin: 1.5rem 0; color: #475569; font-style: italic; }
     </style>
 </head>
 <body>
 
-<h1>📰 Content Refresh Prioritization</h1>
-<p class="subtitle">A Machine Learning Framework for Content Refresh Decisions</p>
-<p><strong>FlyRank ML Internship Capstone • July 2026</strong></p>
-<p><strong>Author:</strong> Fiza Aslam</p>
+<div class="hero">
+    <h1>📰 Content Refresh Prioritization</h1>
+    <p class="subtitle">A Machine Learning Framework for Content Refresh Decisions</p>
+    <p><strong>FlyRank ML Internship Capstone • July 2026</strong></p>
+    <p><strong>Author:</strong> Fiza Aslam</p>
+</div>
 
 <div class="note">
-<strong>📂 Repository:</strong> <a href="https://github.com/FizaAslam1/flyrank-ml-internship">github.com/FizaAslam1/flyrank-ml-internship</a>
+    <strong>📂 Repository:</strong> <a href="https://github.com/FizaAslam1/flyrank-ml-internship">github.com/FizaAslam1/flyrank-ml-internship</a>
 </div>
 
 <hr>
 
 <h2>Abstract</h2>
 
-<p>Content teams managing thousands of pages need to decide which pages to refresh first. Manual review is impossible at scale. This paper presents a machine learning approach to content refresh prioritization using <span class="highlight">Gradient Boosting</span> on FlyRank search warehouse data. On a time-aware split (January-February 2026 training, March 2026 testing), the model achieves <span class="metric">84.7% accuracy</span> and <span class="metric">90% Precision@50</span> — a <span class="metric">66% improvement</span> over the hand-rule baseline (24% Precision@50). The output is a ranked action queue with four priority levels and human-review rules. This framework is directional and decision-support — not causal.</p>
+<p>Content teams managing thousands of pages need to decide which pages to refresh first. Manual review is impossible at scale. This paper presents a machine learning approach to content refresh prioritization using <span class="highlight">Decision Tree</span> on FlyRank search warehouse data. On a time-aware split (January-February 2026 training, March 2026 testing), the model achieves <span class="metric">84.7% accuracy</span> and <span class="metric">94% Precision@50</span> — a <span class="metric">70% improvement</span> over the hand-rule baseline (24% Precision@50). The output is a ranked action queue with four priority levels and human-review rules. This framework is directional and decision-support — not causal.</p>
 
 <hr>
 
@@ -63,7 +83,7 @@
 
 <p>Content teams face a fundamental challenge: with thousands of pages, how do you decide which ones to refresh first? Manual review is impossible. Simple rules (like "refresh pages older than 180 days") achieve only <span class="metric">24% precision</span> — meaning 76% of flagged pages don't actually need refresh.</p>
 
-<p>This paper presents a machine learning solution using Gradient Boosting to rank pages by predicted decline risk. The model learns from <strong>three signals</strong> — impressions, clicks, and search position — to identify pages likely to decline. The output is a ranked action queue enabling content editors to focus on high-priority pages.</p>
+<p>This paper presents a machine learning solution using Decision Tree to rank pages by predicted decline risk. The model learns from <strong>three signals</strong> — impressions, clicks, and search position — to identify pages likely to decline. The output is a ranked action queue enabling content editors to focus on high-priority pages.</p>
 
 <p><strong>Core Question:</strong> "Which page should we refresh next, and why?"</p>
 
@@ -134,15 +154,15 @@
 <table>
     <tr><th>Model</th><th>Accuracy</th><th>Precision@50</th><th>CV Mean</th></tr>
     <tr><td><strong>Baseline (Hand Rule)</strong></td><td>—</td><td>0.24</td><td>—</td></tr>
-    <tr><td>Logistic Regression</td><td>71.4%</td><td>0.48</td><td>0.716</td></tr>
-    <tr><td>Decision Tree</td><td>84.7%</td><td>0.84</td><td>0.851</td></tr>
-    <tr><td>Random Forest</td><td>84.7%</td><td>0.80</td><td>0.851</td></tr>
-    <tr><td><strong>Gradient Boosting</strong> 🏆</td><td><strong>84.7%</strong></td><td><strong>0.90</strong></td><td><strong>0.851</strong></td></tr>
+    <tr><td>Logistic Regression</td><td>71.5%</td><td>0.40</td><td>0.716</td></tr>
+    <tr><td><strong>Decision Tree</strong> 🏆</td><td><strong>84.7%</strong></td><td><strong>0.94</strong></td><td><strong>0.851</strong></td></tr>
+    <tr><td>Random Forest</td><td>84.7%</td><td>0.90</td><td>0.851</td></tr>
+    <tr><td>Gradient Boosting</td><td>84.7%</td><td>0.66</td><td>0.851</td></tr>
 </table>
 
-<p><strong>Best Model:</strong> Gradient Boosting (<code>n_estimators=50, max_depth=3, random_state=42</code>)</p>
+<p><strong>Best Model:</strong> Decision Tree (<code>max_depth=3, random_state=42</code>)</p>
 
-<p><strong>Why Gradient Boosting:</strong> Handles non-linear relationships, robust to class imbalance, sequential learning captures complex patterns.</p>
+<p><strong>Why Decision Tree:</strong> Simple, interpretable, and achieved the highest Precision@50. Decision trees provide clear if-then rules that content teams can understand without ML expertise. The shallow depth (max_depth=3) prevents overfitting while maintaining high accuracy.</p>
 
 <hr>
 
@@ -155,8 +175,8 @@
 <table>
     <tr><th>Metric</th><th>Not Declining</th><th>Declining</th><th>Overall</th></tr>
     <tr><td><strong>Precision</strong></td><td>0.85</td><td>0.84</td><td>0.85</td></tr>
-    <tr><td><strong>Recall</strong></td><td>0.95</td><td>0.63</td><td>—</td></tr>
-    <tr><td><strong>F1-Score</strong></td><td>0.89</td><td>0.72</td><td>—</td></tr>
+    <tr><td><strong>Recall</strong></td><td>0.95</td><td>0.61</td><td>—</td></tr>
+    <tr><td><strong>F1-Score</strong></td><td>0.90</td><td>0.71</td><td>—</td></tr>
     <tr><td><strong>Accuracy</strong></td><td>—</td><td>—</td><td><strong>0.847</strong></td></tr>
 </table>
 
@@ -164,8 +184,8 @@
 
 <table>
     <tr><th>Feature</th><th>Importance</th></tr>
-    <tr><td><strong>impressions</strong></td><td><span class="metric">79.7%</span></td></tr>
-    <tr><td><strong>clicks</strong></td><td><span class="metric">20.2%</span></td></tr>
+    <tr><td><strong>impressions</strong></td><td><span class="metric">80.0%</span></td></tr>
+    <tr><td><strong>clicks</strong></td><td><span class="metric">19.8%</span></td></tr>
     <tr><td><strong>avg_position</strong></td><td><span class="metric">0.2%</span></td></tr>
 </table>
 
@@ -177,8 +197,8 @@
 
 <table>
     <tr><th>Error Type</th><th>Count</th><th>Rate</th></tr>
-    <tr><td><strong>False Negatives</strong> (missed declining)</td><td>5,488</td><td>37% of declining</td></tr>
-    <tr><td><strong>False Positives</strong> (flagged good pages)</td><td>1,636</td><td>5% of non-declining</td></tr>
+    <tr><td><strong>False Negatives</strong> (missed declining)</td><td>5,515</td><td>38.9% of declining</td></tr>
+    <tr><td><strong>False Positives</strong> (flagged good pages)</td><td>1,599</td><td>5.0% of non-declining</td></tr>
 </table>
 
 <p><strong>Trade-off:</strong> Better to flag more (false positives) than miss declining pages. Content teams can quickly dismiss false flags.</p>
@@ -186,8 +206,8 @@
 <h3>4.4 Baseline Comparison</h3>
 
 <table>
-    <tr><th>Metric</th><th>Hand Rule</th><th>Gradient Boosting</th><th>Improvement</th></tr>
-    <tr><td><strong>Precision@50</strong></td><td>0.24</td><td><span class="metric">0.90</span></td><td><span class="metric">+66% (3.75×)</span></td></tr>
+    <tr><th>Metric</th><th>Hand Rule</th><th>Decision Tree</th><th>Improvement</th></tr>
+    <tr><td><strong>Precision@50</strong></td><td>0.24</td><td><span class="metric">0.94</span></td><td><span class="metric">+70% (3.92×)</span></td></tr>
     <tr><td><strong>Accuracy</strong></td><td>—</td><td>84.7%</td><td>—</td></tr>
 </table>
 
@@ -198,14 +218,24 @@
 <h3>5.1 Ranked Actions</h3>
 
 <table>
-    <tr><th>Priority</th><th>Action</th><th>Threshold</th><th>Description</th></tr>
-    <tr><td>🚨 <strong>URGENT_REFRESH</strong></td><td>Immediate review</td><td>Score ≥ 0.70</td><td>Highly likely declining</td></tr>
-    <tr><td>🟡 <strong>REVIEW_NEEDED</strong></td><td>Review this week</td><td>Score ≥ 0.35</td><td>Likely declining</td></tr>
-    <tr><td>🟢 <strong>MONITOR</strong></td><td>Check next month</td><td>Score ≥ 0.20</td><td>Watch for changes</td></tr>
-    <tr><td>✅ <strong>KEEP</strong></td><td>No action</td><td>Score &lt; 0.20</td><td>Currently healthy</td></tr>
+    <tr><th>Priority</th><th>Action</th><th>Threshold</th><th>Pages</th><th>Description</th></tr>
+    <tr><td>🚨 <strong>URGENT_REFRESH</strong></td><td>Immediate review</td><td>Score ≥ 0.70</td><td>10,252</td><td>Highly likely declining</td></tr>
+    <tr><td>🟡 <strong>REVIEW_NEEDED</strong></td><td>Review this week</td><td>Score ≥ 0.35</td><td>6</td><td>Likely declining</td></tr>
+    <tr><td>🟢 <strong>MONITOR</strong></td><td>Check next month</td><td>Score ≥ 0.20</td><td>52</td><td>Watch for changes</td></tr>
+    <tr><td>✅ <strong>KEEP</strong></td><td>No action</td><td>Score &lt; 0.20</td><td>36,122</td><td>Currently healthy</td></tr>
 </table>
 
-<h3>5.2 Human Review Rules</h3>
+<h3>5.2 How a Content Team Would Use This</h3>
+
+<ol>
+    <li><strong>Monday morning:</strong> Open the ranked queue</li>
+    <li><strong>Start with URGENT_REFRESH</strong> (top 20-50 pages)</li>
+    <li><strong>Verify each manually:</strong> Check content age, quality, and business priority</li>
+    <li><strong>Assign writers</strong> to refresh confirmed pages</li>
+    <li><strong>Sample MONITOR pages</strong> monthly for quality check</li>
+</ol>
+
+<h3>5.3 Human Review Rules</h3>
 
 <p>Before acting on any model recommendation:</p>
 <ol>
@@ -216,12 +246,12 @@
     <li>Sample 5-10 MONITOR pages monthly for quality check</li>
 </ol>
 
-<h3>5.3 What Should NEVER Be Automated</h3>
+<h3>5.4 What Should NEVER Be Automated</h3>
 
 <ul>
     <li>❌ Auto-refreshing content (requires human writer)</li>
     <li>❌ Auto-deleting pages</li>
-    <li>❌ Auto-changing titles/URLs</li>
+    <li>❌ Auto-changing titles/URLs (SEO impact needs human judgment)</li>
     <li>❌ Sending automated alerts to clients</li>
     <li>❌ Using as the ONLY input for content strategy</li>
 </ul>
@@ -239,9 +269,10 @@
     <li><strong>Data-dependent:</strong> Uses sampled data (50K rows/month). Full dataset may give different results.</li>
     <li><strong>Not causal:</strong> High decline score ≠ "this page will definitely decline." It means "patterns similar to pages that declined in the past."</li>
     <li><strong>No content quality assessment:</strong> Model uses traffic metrics only. Cannot judge writing quality, accuracy, or brand alignment.</li>
-    <li><strong>Threshold-based:</strong> Action labels depend on threshold (0.35). Teams should adjust based on capacity.</li>
+    <li><strong>Threshold-based actions:</strong> Action labels depend on threshold (0.35). Teams should adjust based on capacity and risk tolerance.</li>
     <li><strong>Single-month test:</strong> March 2026 is one month. Multi-month testing would strengthen confidence.</li>
-    <li><strong>Safe language:</strong> observed / measured / directional / decision-support. No causal claims without experiment.</li>
+    <li><strong>Feature limitation:</strong> Only 3 features (impressions, clicks, position). Additional signals (content type, topic, seasonality) could improve predictions.</li>
+    <li><strong>Safe language:</strong> All claims use observed / measured / directional / decision-support. No causal claims without experimental design.</li>
 </ul>
 
 <hr>
@@ -278,11 +309,10 @@ pip install -r requirements.txt</pre>
 
 <p><strong>Citation:</strong> Content Refresh Prioritization: A Machine Learning Framework for Content Refresh Decisions. FlyRank ML Internship Capstone, July 2026.</p>
 
-<hr>
-
-<p style="text-align: center; color: #94a3b8; margin-top: 3rem;">
-    flyrank.ai • Built with real FlyRank search data • Anonymized research use only
-</p>
+<div class="footer">
+    <p><strong>flyrank.ai</strong> • Built with real FlyRank search data • Anonymized research use only</p>
+    <p style="margin-top: 0.5rem;">© 2026 Fiza Aslam | Data Scientist & ML Engineer</p>
+</div>
 
 </body>
 </html>
